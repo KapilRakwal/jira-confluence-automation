@@ -1,0 +1,3 @@
+- Always follow `./instructions/main.agent.md`.
+- Load the catalog completely, including linked instructions as relevant to the request.
+- Reload it for every prompt so the latest project instructions are used.
