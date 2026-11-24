@@ -1,0 +1,9 @@
+- Use `tools/metric_calculator_leadtime.py` to calculate elapsed lead time for specified completed Jira tickets and the median for those tickets.
+- Obtain at least one Jira issue key, such as `SCRUM-1`; ask for the keys if none were provided.
+- Ensure Python and the `requests` package are available, and set `ATLASSIAN_SITE`, `ATLASSIAN_EMAIL`, and `ATLASSIAN_TOKEN` in the environment.
+- Set `ATLASSIAN_SITE` to the HTTPS Jira site origin without a path or embedded credentials; never print or share the token.
+- From the workspace root, run `python tools\metric_calculator_leadtime.py SCRUM-1 SCRUM-2`, replacing the example keys with the requested keys.
+- Report each ticket's lead time and the median in days, preserving the tool's two-decimal output and ticket count.
+- Explain that lead time is elapsed time from creation to resolution, and the median covers only the supplied eligible tickets, not necessarily the entire team.
+- Report tickets excluded because they are not completed or lack a resolution date; do not include them in the median.
+- If the command fails or no eligible tickets remain, report the error or unavailable median; do not invent results.
