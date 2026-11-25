@@ -8,12 +8,12 @@ POC deadline: **2026-11-30**
 
 ## Phase 1 — Setup
 
-- [ ] Create `dashboard/` folder with `output/` subfolder
-- [ ] Create `.env.example` with `ATLASSIAN_SITE`, `ATLASSIAN_EMAIL`, `ATLASSIAN_TOKEN`, `JIRA_PROJECT`, `WINDOW_DAYS`, `STALE_DAYS`, `POC_DEADLINE`
-- [ ] Create `.gitignore` covering `.env`, `output/`, `__pycache__/`
-- [ ] Copy `.env.example` → `.env` and fill in real credentials (fresh unscoped API token)
-- [ ] Scaffold `dashboard.py` with config loader (`.env` parsing, fail fast on missing keys)
-- [ ] Verify auth works: smoke-call `/rest/api/3/myself` and print the account name
+- [ ] Create `dashboard/` folder with `output/` subfolder — GitHub issue #9
+- [ ] Create `.env.example` with `ATLASSIAN_SITE`, `ATLASSIAN_EMAIL`, `ATLASSIAN_TOKEN`, `JIRA_PROJECT`, `WINDOW_DAYS`, `STALE_DAYS`, `POC_DEADLINE` — GitHub issues #5, #8, #10
+- [ ] Create `.gitignore` covering `.env`, `output/`, `__pycache__/` — GitHub issues #4, #7, #11
+- [ ] Copy `.env.example` → `.env` and fill in real credentials (fresh unscoped API token) — GitHub issue #3
+- [ ] Scaffold `dashboard.py` with config loader (`.env` parsing, fail fast on missing keys) — GitHub issue #2
+- [ ] Verify auth works: smoke-call `/rest/api/3/myself` and print the account name — GitHub issues #1, #6
 
 ## Phase 2 — Core Features
 
