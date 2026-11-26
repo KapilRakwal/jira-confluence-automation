@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 __pycache__/
 *.py[cod]
 .venv/
@@ -8,3 +10,5 @@ env/
 build/
 dist/
 *.egg-info/
+node_modules/
+*.log

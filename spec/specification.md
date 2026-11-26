@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-team-workload-dashboard`  
 **Created**: 2026-11-26  
-**Status**: Draft — implementation assumptions recorded below
+**Status**: Draft — scope approved; implementation assumptions remain to validate
 **Input**: `project_spec.md` v1.0 and the project constitution
 
 ## Summary
@@ -16,6 +16,16 @@ This feature intentionally supersedes the Python-generated static HTML delivery
 and its "no live web app" non-goal in `project_spec.md`. The source metric
 definitions and daily reporting intent remain in scope. This feature covers Jira
 only; Confluence automation requires a separate specification.
+
+## Approved Scope Decision
+
+**Approved by**: Product owner, 2026-11-26
+
+For this feature, deliver a read-only Jira dashboard web application, replacing
+the conflicting static-report delivery model. Confluence automation is
+explicitly excluded and requires a separate specification. This approval is
+limited to feature scope; it does not approve the remaining assumptions or
+authorize production deployment.
 
 ## Decisions at a Glance
 

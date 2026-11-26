@@ -1,0 +1,78 @@
+.dashboard {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #dfe5ec;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #53677d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: #172b4d;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin: 12px 0 0;
+  color: #53677d;
+}
+
+.api-status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #fff1e5;
+  color: #92400e;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+}
+
+.api-status.online {
+  background: #e6f6ed;
+  color: #166534;
+}
+
+.empty-state {
+  margin-top: 32px;
+  border: 1px solid #dfe5ec;
+  border-radius: 12px;
+  background: #fff;
+  padding: 32px;
+}
+
+.empty-state h2 {
+  margin: 0 0 8px;
+  color: #172b4d;
+  font-size: 1.25rem;
+}
+
+.empty-state p {
+  margin: 0;
+  color: #53677d;
+}
+
+@media (max-width: 640px) {
+  .dashboard {
+    padding: 32px 16px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+  }
+}

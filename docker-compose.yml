@@ -1,0 +1,67 @@
+services:
+  database:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-dashboard}
+      POSTGRES_USER: ${POSTGRES_USER:-dashboard}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the project .env file}
+    volumes:
+      - dashboard-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      PORT: 3000
+      ATLASSIAN_SITE: ${ATLASSIAN_SITE:?Set ATLASSIAN_SITE in the project .env file}
+      ATLASSIAN_EMAIL: ${ATLASSIAN_EMAIL:?Set ATLASSIAN_EMAIL in the project .env file}
+      ATLASSIAN_TOKEN: ${ATLASSIAN_TOKEN:?Set ATLASSIAN_TOKEN in the project .env file}
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in the project .env file}
+      JIRA_PROJECT: ${JIRA_PROJECT:-SCRUM}
+      WINDOW_DAYS: ${WINDOW_DAYS:-14}
+      STALE_DAYS: ${STALE_DAYS:-3}
+      POC_DEADLINE: ${POC_DEADLINE:-2026-11-30}
+      REPORTING_TIME_ZONE: ${REPORTING_TIME_ZONE:-Asia/Kolkata}
+      HIGH_RISK_PRIORITIES: ${HIGH_RISK_PRIORITIES:-Highest,High}
+      JIRA_REQUEST_TIMEOUT_SECONDS: ${JIRA_REQUEST_TIMEOUT_SECONDS:-30}
+      REFRESH_TIMEOUT_MINUTES: ${REFRESH_TIMEOUT_MINUTES:-10}
+    expose:
+      - "3000"
+    command: ["sh", "-c", "npm run migrate && npm start"]
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/v1/health/ready').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  dashboard-postgres-data:
