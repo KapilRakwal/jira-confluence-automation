@@ -10,6 +10,8 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "migrate": "node src/migrate.js",
+    "refresh": "node src/refresh.js",
+    "decommission": "node src/decommission.js",
     "lint": "oxlint src test",
     "test": "node --test"
   },

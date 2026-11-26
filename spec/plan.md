@@ -22,21 +22,19 @@ boundary. The feature specification supersedes the older static-report and
 no-live-web-app scope in `project_spec.md`; confirm that scope change with the
 project owner.
 
-## Current starting point
+## Current implementation state
 
-The existing scaffold is a starting point, not a conforming implementation:
+The React 18, Express 5, Node.js 24, and PostgreSQL 15 Compose stack is in
+place. Phases 1–4 have been implemented and their unit and PostgreSQL
+integration checks pass. The dashboard UI for Phase 5 is implemented, including
+API states, summary metrics, charts with equivalent tables, and issue tables.
 
-- The frontend currently uses React 19; the constitution and specification
-  require React 18.
-- The Compose file currently defines frontend and backend only; PostgreSQL 15,
-  persistent storage, and database readiness are not yet present.
-- The Express 5 backend is minimal and does not yet implement the specified
-  Jira client, API contract, persistence, refresh flow, or v1 health routes.
-- The existing Compose health check targets `/api/health`; the required routes
-  are `/api/v1/health/live` and `/api/v1/health/ready`.
-
-Preserve unrelated worktree changes. Limit implementation changes to the
-approved feature and directly required stack alignment.
+The remaining gates are accessibility and supported-browser verification,
+full Compose refresh-to-render acceptance, the defined dataset benchmark, and
+deployment review/sign-off. Live Jira refresh and SSO verification require
+provisioned Jira access and an identified SSO deployment owner. Preserve
+unrelated worktree changes and keep those production gates blocked until their
+external assumptions are confirmed.
 
 ## Phases and milestones
 

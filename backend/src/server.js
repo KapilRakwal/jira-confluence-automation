@@ -5,7 +5,11 @@ import { getMigrationVersions } from './migrations.js'
 
 const config = loadConfig()
 const pool = createPool(config.databaseUrl)
-const app = createApp({ pool, expectedMigrations: getMigrationVersions() })
+const app = createApp({
+  pool,
+  expectedMigrations: getMigrationVersions(),
+  projectKey: config.jiraProject,
+})
 
 app.listen(config.port, '0.0.0.0', () => {
   console.log(`Dashboard API listening on port ${config.port}`)

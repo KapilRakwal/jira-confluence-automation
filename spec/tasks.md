@@ -1,7 +1,8 @@
 # Implementation Tasks: Team Workload & Delivery Dashboard
 
-**Status**: In progress — T0.1 and T1.1–T1.5 complete; T0.2 and Phase 2+
-remain pending
+**Status**: In progress — T0.1, T1.1–T1.5, T2.1–T2.4, T3.1–T3.9,
+T4.1–T4.5, and T5.1–T5.4 complete; T0.2, T4.6, T5.5, and release-readiness
+tasks remain partial or pending
 **Parent plan**: [`plan.md`](./plan.md)
 **Requirements**: [`specification.md`](./specification.md)
 
@@ -34,15 +35,17 @@ this implementation.
 ### T0.2 — Confirm integration and reporting assumptions
 
 **Depends on**: T0.1
+**Status**: Partial — reporting defaults confirmed; Jira site/account remain
+deployment placeholders and SSO owner is TBD
 **Work**: Confirm Jira site/project access, priority names, reporting timezone,
 deadline, service-account permissions, and SSO ownership.
 
 **Acceptance criteria**
 
-- [ ] Jira site, `SCRUM` access, priority mapping, timezone, deadline, and
+- [x] Jira site, `SCRUM` access, priority mapping, timezone, deadline, and
   read-only account are confirmed or documented as deployment configuration.
 - [ ] An owner is identified for the SSO-enabled reverse proxy.
-- [ ] Any changed assumptions are reflected in the specification before
+- [x] Any changed assumptions are reflected in the specification before
   implementation tasks rely on them.
 
 **Trace**: FR-001, FR-008, FR-017–018, FR-033–034; M0
@@ -146,6 +149,7 @@ repeatable local build, lint, test, and Compose workflow.
 ### T2.1 — Design snapshot and refresh-state schema
 
 **Depends on**: T1.2
+**Status**: Complete — project-scoped snapshot and refresh-state tables added
 **Work**: Define a minimal PostgreSQL model for the latest dashboard snapshot
 and latest refresh state per project.
 
@@ -163,6 +167,7 @@ and latest refresh state per project.
 ### T2.2 — Implement repeatable migrations and readiness integration
 
 **Depends on**: T2.1, T1.4
+**Status**: Complete — migration applied idempotently and readiness verified
 **Work**: Add a committed migration runner and connect migration completion to
 backend readiness.
 
@@ -180,6 +185,8 @@ backend readiness.
 ### T2.3 — Implement snapshot persistence access
 
 **Depends on**: T2.1
+**Status**: Complete — transactional persistence and isolated PostgreSQL test
+verified
 **Work**: Add separated persistence operations for reading the current
 snapshot/state and transactionally storing a successful snapshot.
 
@@ -197,6 +204,8 @@ snapshot/state and transactionally storing a successful snapshot.
 ### T2.4 — Implement dashboard API contract and error responses
 
 **Depends on**: T2.2, T2.3
+**Status**: Complete — dashboard success, not-ready, and sanitized failures
+covered by tests
 **Work**: Implement `GET /api/v1/dashboard`, response serialization, health
 route error behavior, and stable sanitized error shapes.
 
@@ -220,6 +229,7 @@ route error behavior, and stable sanitized error shapes.
 ### T3.1 — Implement the server-side Jira client
 
 **Depends on**: T1.3, T0.2
+**Status**: Complete — backend-only read client and mocked request tests added
 **Work**: Add a REST API v3 client that authenticates using backend-only
 configuration and requests only the read data required by this feature.
 
@@ -237,6 +247,8 @@ configuration and requests only the read data required by this feature.
 ### T3.2 — Retrieve complete open and completed issue datasets
 
 **Depends on**: T3.1, T0.2
+**Status**: Complete — paginated JQL, exact local-window filtering, and
+404/410-only fallback verified with fixtures
 **Work**: Implement the specified JQL searches, pagination, dataset membership,
 and issue deduplication.
 
@@ -258,6 +270,8 @@ and issue deduplication.
 ### T3.3 — Retrieve and normalize Jira changelogs
 
 **Depends on**: T3.1, T3.2
+**Status**: Complete — all changelog pages and UTC status/assignee transitions
+covered by fixtures
 **Work**: Retrieve all required changelog pages and normalize status,
 assignee, and transition events for calculations.
 
@@ -276,6 +290,8 @@ assignee, and transition events for calculations.
 ### T3.4 — Enforce Jira retry, timeout, and concurrency rules
 
 **Depends on**: T3.1
+**Status**: Complete — retries, request timeout, shared refresh deadline, and
+five-request concurrency ceiling are tested
 **Work**: Add bounded retry and concurrency behavior for Jira requests.
 
 **Acceptance criteria**
@@ -296,6 +312,8 @@ assignee, and transition events for calculations.
 ### T3.5 — Implement reporting-window and date/time utilities
 
 **Depends on**: T1.3
+**Status**: Complete — timezone-aware windows, UTC elapsed durations, and date
+boundaries verified
 **Work**: Implement deterministic utilities for fixed `asOfAt`, local date
 windows, UTC elapsed duration, and ISO serialization.
 
@@ -315,6 +333,8 @@ windows, UTC elapsed duration, and ISO serialization.
 ### T3.6 — Calculate roster, workload, and throughput
 
 **Depends on**: T3.2, T3.3, T3.5
+**Status**: Complete — roster, Unassigned, average, and daily-series fixtures
+pass
 **Work**: Implement workload aggregation, dynamic roster behavior, average
 workload, and daily completion series.
 
@@ -335,6 +355,8 @@ workload, and daily completion series.
 ### T3.7 — Calculate cycle time, lead time, and coverage
 
 **Depends on**: T3.2, T3.3, T3.5
+**Status**: Complete — reopened-cycle selection, elapsed durations, medians,
+attribution, and coverage fixtures pass
 **Work**: Implement cycle selection for reopened issues, lead-time calculation,
 assignee-at-resolution averages, medians, and coverage counts.
 
@@ -358,6 +380,7 @@ assignee-at-resolution averages, medians, and coverage counts.
 ### T3.8 — Calculate risk, current-status age, and deadline countdown
 
 **Depends on**: T3.2, T3.3, T3.5
+**Status**: Complete — risk and status-age boundaries are fixture-tested
 **Work**: Implement risk rules, open-issue status age, deadline countdown, and
 specified sorting.
 
@@ -381,6 +404,8 @@ specified sorting.
 ### T3.9 — Assemble and validate the dashboard snapshot
 
 **Depends on**: T2.4, T3.6, T3.7, T3.8
+**Status**: Complete — snapshot contract validation and empty-state fixtures
+pass
 **Work**: Combine calculated datasets into the exact API snapshot contract.
 
 **Acceptance criteria**
@@ -402,6 +427,8 @@ specified sorting.
 ### T4.1 — Implement refresh orchestration
 
 **Depends on**: T2.3, T3.9
+**Status**: Complete — fixed `asOfAt`, complete Jira inputs, calculations, and
+deadline validation are fixture-tested
 **Work**: Implement the refresh flow from fixed `asOfAt` through Jira fetch,
 calculations, validation, and publication input.
 
@@ -419,6 +446,8 @@ calculations, validation, and publication input.
 ### T4.2 — Prevent concurrent project refreshes
 
 **Depends on**: T2.1
+**Status**: Complete — PostgreSQL advisory lock integration tested for same-
+project exclusion, separate projects, and release after failure
 **Work**: Add a PostgreSQL advisory lock scoped to the configured project.
 
 **Acceptance criteria**
@@ -436,6 +465,8 @@ calculations, validation, and publication input.
 ### T4.3 — Publish successful snapshots atomically and retain prior data
 
 **Depends on**: T2.3, T4.1, T4.2
+**Status**: Complete — PostgreSQL integration test verifies atomic success and
+prior-snapshot retention after refresh failure
 **Work**: Implement successful transaction and separate failure-state update.
 
 **Acceptance criteria**
@@ -456,6 +487,8 @@ calculations, validation, and publication input.
 ### T4.4 — Add structured redacted operational logs
 
 **Depends on**: T3.1, T4.1
+**Status**: Complete — refresh lifecycle logs use stable categories and a
+redaction test excludes error content
 **Work**: Add structured logs for refresh lifecycle and failures.
 
 **Acceptance criteria**
@@ -474,6 +507,8 @@ calculations, validation, and publication input.
 ### T4.5 — Add refresh command and Windows wrapper
 
 **Depends on**: T2.2, T4.3, T4.4
+**Status**: Complete — npm refresh command and PowerShell wrapper added; wrapper
+syntax validated
 **Work**: Add `npm run refresh` and the repository PowerShell wrapper used for
 both manual and scheduled refresh.
 
@@ -492,6 +527,8 @@ both manual and scheduled refresh.
 ### T4.6 — Document and configure daily scheduling
 
 **Depends on**: T4.5, T0.2
+**Status**: Partial — Task Scheduler instructions documented; registration and
+controlled scheduled run await deployment-account setup
 **Work**: Document Windows Task Scheduler setup for daily execution.
 
 **Acceptance criteria**
@@ -512,67 +549,75 @@ both manual and scheduled refresh.
 ### T5.1 — Build dashboard shell and API loading states
 
 **Depends on**: T2.4
+**Status**: Complete — API-only data loading, response validation, and distinct
+loading, not-ready, stale/failed, and unavailable states are tested
 **Work**: Implement the React page shell and fetch the dashboard only from the
 backend API.
 
 **Acceptance criteria**
 
-- [ ] Frontend does not call Jira or connect to PostgreSQL.
-- [ ] Initial loading, no-snapshot, stale/failed-refresh, and API-unavailable
+- [x] Frontend does not call Jira or connect to PostgreSQL.
+- [x] Initial loading, no-snapshot, stale/failed-refresh, and API-unavailable
   states are distinct and understandable.
-- [ ] API data is validated or safely handled before rendering.
-- [ ] API errors do not expose internal stack traces or credentials.
+- [x] API data is validated or safely handled before rendering.
+- [x] API errors do not expose internal stack traces or credentials.
 
 **Trace**: FR-026–027, FR-034; SC-001, SC-008
 
 ### T5.2 — Render project summary and deadline metrics
 
 **Depends on**: T5.1, T3.9
+**Status**: Complete — summary cards, snapshot metadata, deadline, and null
+metric rendering are implemented and covered by fixture-backed UI tests
 **Work**: Render project identity, snapshot metadata, deadline countdown, and
 summary metrics.
 
 **Acceptance criteria**
 
-- [ ] Header shows project key, generation time, and snapshot age.
-- [ ] Deadline countdown, open/completed/at-risk counts, median cycle time,
+- [x] Header shows project key, generation time, and snapshot age.
+- [x] Deadline countdown, open/completed/at-risk counts, median cycle time,
   median lead time, and timing coverage match the API response.
-- [ ] Null metrics render as "Unavailable" or "No data" as appropriate; missing
+- [x] Null metrics render as "Unavailable" or "No data" as appropriate; missing
   values are not rendered as fabricated zero durations.
-- [ ] Empty datasets show explicit zero or "No data" states.
+- [x] Empty datasets show explicit zero or "No data" states.
 
 **Trace**: FR-021–022, FR-025, FR-027; SC-001
 
 ### T5.3 — Render workload and throughput charts
 
 **Depends on**: T5.1, T3.9
+**Status**: Complete — pinned Chart.js SRI/CSP and CDN delivery verified; chart
+fallback and equivalent data tables are covered by UI tests
 **Work**: Add Chart.js visualizations and their security/fallback behavior.
 
 **Acceptance criteria**
 
-- [ ] Workload chart includes roster members and Unassigned; bars above the
+- [x] Workload chart includes roster members and Unassigned; bars above the
   defined average are highlighted without relying on color alone.
-- [ ] Throughput chart shows every reporting date, including zero counts.
-- [ ] Chart.js is an exact pinned 4.x CDN release with committed SRI hash and
+- [x] Throughput chart shows every reporting date, including zero counts.
+- [x] Chart.js is an exact pinned 4.x CDN release with committed SRI hash and
   appropriate Content Security Policy.
-- [ ] Blocking the CDN displays a fallback message while equivalent values
+- [x] Blocking the CDN displays a fallback message while equivalent values
   remain available in text/table form.
-- [ ] Jira issue data is not sent to the CDN.
+- [x] Jira issue data is not sent to the CDN.
 
 **Trace**: FR-009–011, FR-023–024; SC-003, SC-006, SC-011
 
 ### T5.4 — Render timing, risk, and open-work tables
 
 **Depends on**: T5.1, T3.9
+**Status**: Complete — timing coverage, risk reasons, and complete open-work
+tables are implemented and fixture-tested
 **Work**: Add accessible tables for timing coverage, risk, and full open work.
 
 **Acceptance criteria**
 
-- [ ] Timing view shows required averages/medians and eligible, included, and
+- [x] Timing view shows required averages/medians and eligible, included, and
   excluded counts.
-- [ ] At-risk table shows all required fields and every applicable reason in
+- [x] At-risk table shows all required fields and every applicable reason in
   the specified sort order.
-- [ ] Open-work table shows all required fields in issue-key order.
-- [ ] Missing assignees, dates, or status ages are represented as specified,
+- [x] Open-work table shows all required fields in issue-key order.
+- [x] Missing assignees, dates, or status ages are represented as specified,
   not silently omitted or fabricated.
 
 **Trace**: FR-014–021, FR-025; SC-001, SC-014
@@ -580,6 +625,10 @@ summary metrics.
 ### T5.5 — Verify accessibility and supported browsers
 
 **Depends on**: T5.2, T5.3, T5.4
+**Status**: Partial — the no-snapshot view and semantic region were checked in
+Edge, and a narrow-viewport overflow check passed in Chromium after removing
+the minimum-width constraint; full WCAG 2.1 AA and latest Edge/Chrome release
+verification remain outstanding
 **Work**: Validate dashboard accessibility and behavior in supported browsers.
 
 **Acceptance criteria**
@@ -598,6 +647,9 @@ summary metrics.
 ### T6.1 — Run full-stack integration and acceptance tests
 
 **Depends on**: T1.5, T2.4, T3.9, T4.3, T5.5
+**Status**: Partial — backend/frontend suites and PostgreSQL persistence,
+refresh-lock, publication, and failure-retention integration checks pass;
+full Compose refresh-to-render end-to-end acceptance remains outstanding
 **Work**: Verify the full Compose application using isolated PostgreSQL data
 and mocked Jira responses.
 
@@ -616,6 +668,8 @@ and mocked Jira responses.
 ### T6.2 — Verify SSO protection for frontend and API
 
 **Depends on**: T0.2, T5.1
+**Status**: Blocked — SSO reverse-proxy owner and approved deployment boundary
+have not been identified
 **Work**: Configure or integrate with the approved SSO-enabled reverse proxy
 for both protected routes.
 
@@ -634,6 +688,7 @@ for both protected routes.
 ### T6.3 — Validate benchmark performance and completeness
 
 **Depends on**: T4.3, T6.1
+**Status**: Pending — the 1,000-open/500-completed benchmark has not been run
 **Work**: Benchmark the defined test dataset and verify no dataset truncation.
 
 **Acceptance criteria**
@@ -651,6 +706,8 @@ for both protected routes.
 ### T6.4 — Complete security and operational review
 
 **Depends on**: T4.4, T4.5, T5.3, T6.2
+**Status**: Partial — local CSP/SRI, error sanitization, and refresh-log
+redaction checks pass; production Jira permissions and SSO remain unverified
 **Work**: Review credentials, permissions, logs, CDN policy, retention, and
 operational procedures before release.
 
@@ -669,6 +726,8 @@ operational procedures before release.
 ### T6.5 — Update operating documentation and obtain release sign-off
 
 **Depends on**: T6.1, T6.2, T6.3, T6.4
+**Status**: Partial — local setup and refresh guidance is documented; product
+and deployment-owner sign-off is outstanding
 **Work**: Finalize README/runbook instructions and obtain product and
 deployment-owner acceptance.
 

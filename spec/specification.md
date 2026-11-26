@@ -564,6 +564,13 @@ remain within the total refresh timeout.
 
 ## Assumptions and Decisions to Validate
 
+- On 2026-11-26, the product owner confirmed `Highest,High` as the priority
+  mapping, `Asia/Kolkata` as the reporting timezone, and `2026-11-30` as the
+  POC deadline. The Jira site, `SCRUM` access, and dedicated read-only account
+  remain deployment placeholders until provisioned; no credentials are stored
+  in this specification.
+- The owner for the SSO-enabled reverse proxy is still TBD and must be assigned
+  before release.
 - The reporting timezone defaults to `Asia/Kolkata` based on the project
   owner's stated locale; deployments may override it. The configured timezone
   governs the 08:00 schedule, date buckets, stale-day reporting, and deadline
